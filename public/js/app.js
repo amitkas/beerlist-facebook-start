@@ -1,6 +1,6 @@
 var app = angular.module('beerList', ['ui.router']);
 
-app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $locationProvider.html5Mode(true);
   $stateProvider
@@ -17,5 +17,34 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         beerParam: null
       }
     })
+
+    .state('auth', {
+      url: '/authorization?token&name',
+      controller: function ($stateParams, $state, $rootScope) {
+        $rootScope.currentUser = $stateParams.name;
+        if ($stateParams.token) {
+          var user = {
+            name: $stateParams.name,
+            token: $stateParams.token
+          }
+          localStorage.setItem("user", JSON.stringify(user));
+          $rootScope.currentUser = user.name;
+          $state.go('home');
+        }
+      }
+    })
+
+
+
+
   $urlRouterProvider.otherwise('/home');
 });
+
+app.run(function ($rootScope) {
+  //retrieve user from local storage
+  //if a user was retrieved set the currentUser
+  var user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    $rootScope.currentUser = user.name;
+  }
+})

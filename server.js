@@ -36,6 +36,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+
 //start the server
 app.listen('8000', function() {
   console.log("yo yo yo, on 8000 bro");
