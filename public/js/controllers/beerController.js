@@ -1,4 +1,4 @@
-app.controller('beerController', function($scope, beerFactory, $stateParams) {
+app.controller('beerController', function($scope, beerFactory, $stateParams, $rootScope) {
 
   if (!$stateParams.beerParam) {
     beerFactory.getBeer($stateParams.id)

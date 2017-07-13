@@ -20,7 +20,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
     .state('auth', {
       url: '/authorization?token&name',
-      controller: function ($stateParams, $state, $rootScope) {
+      controller: function ($stateParams, $state, $rootScope, $http) {
         $rootScope.currentUser = $stateParams.name;
         if ($stateParams.token) {
           var user = {
@@ -29,9 +29,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
           }
           localStorage.setItem("user", JSON.stringify(user));
           $rootScope.currentUser = user.name;
+          $http.defaults.headers.common.Authorization = 'Bearer ' + user.token;
           $state.go('home');
         }
-      }
+      },
+
     })
 
 
