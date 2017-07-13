@@ -1,6 +1,6 @@
 var app = angular.module('beerList', ['ui.router']);
 
-app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
   $locationProvider.html5Mode(true);
   $stateProvider
@@ -36,17 +36,30 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
     })
 
-
+  $httpProvider.interceptors.push(function ($q, $window) {
+    return {
+      responseError: function (error) {
+        if (error.data.message == "jwt expired") {
+          $window.location.href = "/auth/facebook"
+          return error
+        } else {
+          return $q.reject(error)
+        }
+      }
+    };
+  })
 
 
   $urlRouterProvider.otherwise('/home');
 });
 
-app.run(function ($rootScope) {
+app.run(function ($rootScope, $http) {
   //retrieve user from local storage
   //if a user was retrieved set the currentUser
   var user = JSON.parse(localStorage.getItem("user"));
   if (user) {
     $rootScope.currentUser = user.name;
   }
+  $http.defaults.headers.common.Authorization = 'Bearer ' + user.token;
+
 })

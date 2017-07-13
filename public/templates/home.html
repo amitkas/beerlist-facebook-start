@@ -29,18 +29,27 @@
         <form ng-hide='!currentUser'>
             <h3>Add a new beer</h3>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Beer Name" ng-model="newBeer.name"></input>
+                <input type="text" class="form-control" placeholder="Beer Name" ng-model="newBeer.name" required></input>
             </div>
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Style" ng-model="newBeer.style"></input>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="ABV" ng-model="newBeer.abv"></input>
+                <input type="text" class="form-control" placeholder="ABV" ng-model="newBeer.abv" ng-pattern="/^[a-zA-Z]*$/"></input>
+                <span ng-show="$error.pattern">Not a valid number!</span>
+
             </div>
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Image URL" ng-model="newBeer.image_url"></input>
             </div>
             <button ng-click="addBeer()" class="btn btn-primary">Add Beer</button>
         </form>
+        <!--<div>
+            <form name="myForm" ng-submit="onSubmit()">
+                <span ng-show="myForm.price_field.$error.pattern">Not a valid number!</span>
+                <span ng-show="myForm.price_field.$error.required">This field is required!</span>
+                <input type="submit" value="submit" />
+            </form>
+        </div>-->
     </div>
 </div>
